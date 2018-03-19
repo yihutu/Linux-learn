@@ -1,0 +1,446 @@
+1.mkdir   创建目录  make directory 
+      
+2.ls      显示目录中的内容，列表 list 
+   -l（小写字母L) 显示详细的信息     
+   -d             把目录当做是文件来处理
+   ls -l  /tmp 
+   ls -ld /tmp 
+   -a     显示所有包括隐藏文件 
+   -h    --human-readable
+   -t   按照文件的时间排序
+   -r   逆序排序 
+   
+3.pwd  显示当前你所在的位置 路径  print working directory
+
+4.cd   改变当前你所在位置/路径/目录 change directory
+  cd - 回到上一次你所在的位置 
+  cd ~  ====  cd  回到当前用户的老家
+  
+5.touch 创建文件  修改文件的时间戳
+
+6.vi 文本编辑器 
+   1）使用vi打开oldboy.txt
+   vi /data/oldboy.txt
+   默认是命令模式。
+   2）按i  ===>insert插入模式(编辑模式)  ====>然后输入文本
+   I am studying linux.
+   3）按esc键 我不想编辑了，退出编辑模式（插入模式），再次进入到命令模式
+   4）保存并退出
+   :wq
+   w write 写入
+   q quit  退出
+   5）补充
+   :q  表示的是退出 quit 
+   :q!   q!表示强制退出  退出不保存 
+   vi   windwows记事本
+   vim  notepad++ emeditor 复杂
+   vi/vim 命令（快捷键）
+   gg   把光标移动到文件的第一行 
+   G    把光标移动到文件的最后行
+   :set nu   显示行号 
+   :set nonu 不显示行号。
+   ：set paste 粘贴内容会排序
+   dG 剪切当前行到最后一行的内容
+   vim批量编辑方法：ctrl+v
+   上下键选中
+   shift+i 第一行编辑
+   按esc多行都会编辑
+   删除：ctrl+v  ，上下选中，按x或d
+a.ctrl+v进入模式，上下选中需要编辑的列 b.shift+i进入编辑 c.输入编辑内容 d.esc退出编辑的内容会出现在列上
+   
+命令行：
+vim 复制内容方法
+20,22copy22   ---表示将20到22行内容复制到22行之后
+
+vim中常用的替换信息命令格式
+%s#/backup#$Backup_Dir#g
+
+#后没有空格的表示参数
+如#port22
+
+7.cat   显示文件内容 
+  -n    显示行号和文件内容 
+  往文件中一次放入多行  
+  cat >>/data/oldboy.txt<<EOF
+  I am studying linux.
+  I am studying linux.
+  I am studying linux.
+  I am studying linux.
+  I am studying linux.
+  I am studying linux.
+  EOF
+
+8.echo  把后面的内容显示（输出，打印）到屏幕
+  -n  表示显示内容后不输出回车
+  -e  表示支持 开启了 对撬棍系列（转义字符）的支持 
+  echo -e "oldboy\noldboy\toldgirl"
+	
+9.xargs 分组
+  -n 2  分成2组 每一行只显示2列。
+
+10.cp  复制文件或目录  默认不能复制目录 
+   -a  -pdr 
+   -r  递归 目录及目录的内容（子孙后代）
+   -p  复制的时候 保持文件或目录的属性不变。
+   cp /etc/libvirt/qemu/c72-moban.xml{,.iro} 快速备份
+   		
+11.mv  移动（搬家）  
+   mv /data /root
+
+12.rm  remove 删除 删除文件或目录 默认只能删除文件 
+   -r  递归 删除目录 及目录的内容（子孙后代）
+   -f  强制删除 不给任何提示
+
+13.find  用来找文件或目录	linux四剑客
+   find /data/     -type f      -name "oldboy.txt"
+   找哪里的？ 找什么类型   找什么名字
+   -maxdepth  找最多几层目录 		
+   -type  f（file普通文件） 
+   d(directory目录 )        
+   -name "*.txt"
+   以.txt结尾的文件
+   find /data -type f -name "*.txt"		 
+   !非 取反
+      				 		 
+14.grep 三剑客老三，擅长过滤，在文件中找东西 
+   -v   排除，把grep找到的东西 排除掉。
+   -n   给grep命令找到的内容加上一个行号 
+   -i   ignore case 找东西的时候 不区分大小写
+   grep -E ==== egrep 支持高级货色 |
+      
+15.head 头，取文件的头几行，默认文件的前10行 
+   -num   取文件的头num行  ===== -n 数字 
+
+16.tail 尾，取文件的结尾的几行，默认文件的结尾的10行		 
+    -num   取文件的结尾num行  ===== -n 数字
+    -f     显示文件的实时的更新
+			
+17.alias  查看或配置linux别名
+   unalias 临时取消别名
+     
+18.sed  三剑客老二，擅长取某一行 
+   sed -n '20,30p' ett.txt
+   sed -n '20p' ett.txt 
+    -n  取消默认输出  与 p (print)配合 
+    -i  修改文件的内容
+    -i.bak  小尾巴，表示先对源文件进行备份 源文件.bak  然后再对文件内容进行修改
+   's#oldboy#oldgirl#g'	
+   's###g'
+   's@@@g'
+	
+19.awk  三剑客老大，擅长取某一列
+   NR 行号 number of record
+   awk 'NR==20,NR==30' ett.txt
+   awk '{print $1}' nginx.conf
+   -F 指定分隔符-菜刀 field separator  
+   -F ","     以逗号为菜刀
+   -F "[ ,]"  以空格或者逗号为菜刀  
+
+20.ifup  启动某一块网卡
+   ifup eth0 
+21.ifdown 关闭某一块网卡
+    ifdown eth0 
+		
+22.ifconfig  查看网卡的ip地址
+
+23.uname  显示系统内核信息
+   -r    显示的是内核版本 
+   -m    32位 64位 
+     
+24.useradd  添加用户 
+   -g  指定用户组名字
+   -u  指定用户的uid
+   -s  指定用户使用的命令解释器 shell
+   -M  不创建用户的家目录
+
+25.passwd   给用户设置密码
+    --stdin从管道前面获取密码
+   [root@oldboyedu36 ~]# 
+   [root@oldboyedu36 ~]# echo 123456 |passwd --stdin oldboy
+   Changing password for user oldboy.
+   passwd: all authentication tokens updated successfully.
+
+26.whoami  查看当前用户名字
+
+27.su   switch user  切换用户 
+su  -  oldboy
+
+28.setenforce  配置selinux    getenforce  查看selinux状态 	
+
+29.chkconfig   管理linux开机自启动服务/软件 
+   chkconfig iptables off 
+   --level   处理指定运行级别 
+   --list    显示某个软件的开机启动状况 
+     
+30.source  让配置生效  /etc/profile   /etc/sysconfig/i18n 
+source  /etc/sysconfig/i18n 
+.  /etc/sysconfig/i18n 
+
+31.w    显示谁登陆了系统 并在正在干啥  显示系统负载信息 
+
+32.df  查看磁盘空间的使用情况 
+   -h  以人类可读的方式显示出来 
+   -i  显示磁盘中inode的使用情况
+   
+33.free 系统内存
+   -h  
+   
+34.tree 以树的形状显示目录结构 
+   -L  最多显示几层目录 
+   -d  只显示目录 
+
+35.nl   number line  显示文件内容及行号 
+  
+36.tar 创建压缩包
+   z----gzip    使用gzip软件进行压缩 ----- .tar.gz 
+   c    create  创建包 
+   t    list    查看压缩包内容 
+   x    extract 解压 
+   tar zcf  创建压缩包 
+   tar tf   查看压缩包内容
+   tar xf   解压
+   
+37.cut  切割 awk的小弟   阉割版的awk 
+   -d  指定一把菜刀  (默认以tab键（8个空格这么长的一个区域）)
+   -f1 取第一列 
+   -f1,5 取第一列和第5列
+   -f2-6 取从第二列开始到第六列结束
+  
+38.wc  word calculate统计文件信息 
+   -l  line 统计文件中有多少行 
+
+39.ss /netstat  显示系统连接状态
+   ss -lntup |grep sshd  ##查看服务对应的端口或某个端口是否开启
+   ss -lntup |grep 22 
+ 
+40.ln 创建链接 默认创建硬链接 
+    -s 创建软链接 
+    
+41.du  计算文件所占的空间
+   -s   summary 简介
+   -h   人类可读的方式显示大小   
+   du -sh /*
+
+42.lsof list openning file 显示所有被打开的文件 
+ 
+43.stat 显示文件属性信息 
+
+44.date 显示或设置时间 
+   +以某种格式显示日期  
+   %F      %Y-%m-%d  2017-06-03
+   %w      星期几  0表示周日  
+   %T      %H:%M:%S 小时:分钟:秒
+   -d  根据你的描述显示指定的日期
+   date  +%F_%H 
+   date -s "10sec" 加10秒
+45.which 查找命令的全路径 绝对路径 命令的位置
+
+46.whereis 查找命令还有帮助文档的位置 
+
+47.locate  根据名字查找文件的位置（根据一个列表查找） 
+   [root@oldboyedu37-nb ~]# ll /var/lib/mlocate/mlocate.db 
+   -rw-r----- 1 root slocate 1381104 Jun  3 21:14 /var/lib/mlocate/mlocate.db
+   [root@oldboyedu37-nb ~]# file  /var/lib/mlocate/mlocate.db 
+   /var/lib/mlocate/mlocate.db: data
+   
+48.shutdown 
+  -h  时间（分钟） halt   关机
+  -r  时间（分钟） reboot 重启 
+
+49.halt 关机
+
+50.reboot 重启 
+
+51.chmod  change mode 修改权限 
+   -R  递归修改权限  修改目录及其子目录的权限 
+   chmod -R  644 data
+
+52.chattr  change attribute  修改文件的特殊的属性 权限 
+   chattr +a  oldboy.txt 
+   
+          +i 
+
+53.lsattr  list attribute 显示文件或目录的特殊权限   
+     
+54.ps process 查看系统进程信息（帮助）
+ps -ef 查看系统进程信息
+55.less  查看文件的内容 类似于vi
+ -aux
+ 查看文件的绝对路径如下：###机器nginx的进程号是不一样的，12190是进程号，依据实际更改
+ ps aux|grep nginx  
+ ls -l /proc/12190/exe
+
+56、查看IP信息 
+    ip a 
+    ifconfig eth0
+    ip address show eth0 
+    ip a s eth0 
+
+57.userdel 删除用户
+  -r  删除用户和用户家目录
+
+58.usermod 修改用户信息
+
+59.groupadd 添加用户组
+  -g  指定用户组的gid
+
+60.id  查看用户信息
+
+61.last 查询用户登录信息  谁最近在哪里登陆了你的系统
+
+62.nmap -p 22 172.16.1.41 扫描本地
+     nmap -p 1-1024 www.baidu.com 扫描百度的1-1024端口有哪些开启了
+
+63、nc 172.16.1.41 22 扫描本地端口
+
+64、dig +trac www.baidu.com   DNS请求的递归查询过程
+    dig +trace -t A @8.8.8.8 taobao.com
+
+
+65、arping -c 1 -I eth0 10.0.0.6   ##解析mac地址
+
+66、yum的用法
+    yum安装卸载命令，
+    yum install 'package_name'
+    yum remove 'package_name'
+    
+    yum查询想要安装的包
+    yum search 'keyword'
+    例如yum search messenger
+    
+    模糊搜索本地yum包
+    yum list | grep packageName
+    
+    列出所有可安装的软件包
+    yum list
+    
+    列出所有可更新的软件包
+    yum list updates
+    
+    列出所有已安装的软件包
+    yum list installed
+    
+    列出所有已经安装但不在repository的包
+    yum list extras
+    
+    另有命令查看软件包的详细信息
+    yum info ..
+    
+    
+    清除yum缓存
+    yum clean ..
+  
+  
+  加快yun速度，使用yum-plugin-fastestmirror
+  yum -y install yum-plugin-fastestmirror
+
+
+一、linux下面查询帮助的方法：
+1.man 命令  命令帮助 
+  man hosts linux的配置文件的帮助
+  /etc/hosts
+http://linux.51yip.com
+http://man.linuxde.net
+2.命令 --help    -h(少数)
+3.help linux内置命令 
+	
+二、linux下面的快捷键
+0.上下键             上一个命令或下一个命令 
+1.ctrl+c             取消当前的操作 
+2.ctrl+l(小写字母L)  清屏（清楚屏幕上的内容）
+3.ctrl+d             退出当前用户
+
+三、特殊符号：
+1.>
+2.>>
+3.<
+4.<<
+5. *(星号)    表示所有东西（文本 文字） *.txt 
+6. | （管道） 把前一个命令的结果通过管道传递给后面一个命令
+7. .. (点点)  表示上一级目录 当前目录的上一级目录。
+8. . (点)   表示当前目录。
+9. ~        表示当前家目录
+
+四、正则表达式--三剑客 grep sed awk 
+1. ^d     以d开头的行  以.....开头的行
+2.  .(点) 任意一个字符/文本 
+3.  |     表示或者  需要egrep命令才能使用 
+
+扩展：
+总结：
+五、find
+-maxdepth 最大的深度 最深的目录层数 
+-type 类型 d | f 
+-name 名字 "*.log"
+-size 大小 
+      +10k
+      -10k
+      k M G
+-mtime 修改时间 +7 7天以前 
+ 
+六、sed 取行 查找替换 删除文件内容
+sed '找谁干啥'
+找谁
+1.固定的行号 
+2p 
+2,10p
+干啥
+#sed里面的命令 
+#p---print      显示出来 需要和-n 配合 
+#s---substitute 替换 s#oldboy#oldgirl#g  (global 全局) s和g放在一起表示全局替换
+#d---delete     删除某行 （grep -v )
+
+七、awk
+-F 指定每一列的分隔符  菜刀
+ NR行号 
+ '/找谁/'
+ 'NR==2'
+ 'NR==2,NR==10'
+
+	
+八、[root@oldboyedu37-nb ~]# #1 查看相应端口是否开启
+[root@oldboyedu37-nb ~]# netstat -lntup|grep 22
+tcp        0      0 0.0.0.0:22                  0.0.0.0:*                   LISTEN      1217/sshd           
+tcp        0      0 :::22                       :::*                        LISTEN      1217/sshd           
+[root@oldboyedu37-nb ~]# #2 查看方式
+[root@oldboyedu37-nb ~]# lsof -i:22
+COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+sshd    1217 root    3u  IPv4  10524      0t0  TCP *:ssh (LISTEN)
+sshd    1217 root    4u  IPv6  10526      0t0  TCP *:ssh (LISTEN)
+sshd    1256 root    3r  IPv4  10668      0t0  TCP 10.0.0.200:ssh->10.0.0.253:sxmp (ESTABLISHED)
+[root@oldboyedu37-nb ~]# #3 查看方式
+[root@oldboyedu37-nb ~]# ss -lntup|grep 22
+tcp    LISTEN     0      128                   :::22                   :::*      users:(("sshd",1217,4))
+tcp    LISTEN     0      128                    *:22                    *:*      users:(("sshd",1217,3))
+[root@oldboyedu37-nb ~]# #4 查看方式
+[root@oldboyedu37-nb ~]# telnet 10.0.0.200 22
+[root@oldboyedu37-nb ~]# #5 查看端口方式
+[root@oldboyedu37-nb ~]# nmap
+-bash: nmap: command not found
+[root@oldboyedu37-nb ~]# #6 查看端口方式
+[root@oldboyedu37-nb ~]# nc
+消灭指定用户运行的所有东西
+kill -9 `lsof -t -u daniel`
+使用-c查看指定的命令正在使用的文件和网络连接
+sof -c syslog-ng
+
+
+九、查看服务属于哪个软件包
+[root@livedvd ~]# rpm -qf `which ssh`
+openssh-clients-5.3p1-122.el6.x86_64
+yum search ssh 查询想要安装的包，也可以但是很多
+①. 确认rsync软件程序是否安装
+    rpm -qa rsync    --- 表示查看软件是否安装
+    rpm -ql rsync    --- 表示查看软件都安装了哪些信息
+    rpm -qf `which rsync`   ---查看相应命令属于哪个软件包
+
+hostname -I 区内外网IP
+hostname -i 取hosts文件里主机名对应的IP
+sh -x 脚本 查看脚本运行过程
+
+编译软件默认放在/usr/local
+
+cp oldboy.txt{,.bak}=====cp oldboy.txt oldboy.txt.bak
+
+让软件/脚本在后台运行
+运行脚本加&就可以了 （sh test.sh  &）
