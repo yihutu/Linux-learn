@@ -299,42 +299,9 @@ ps -ef 查看系统进程信息
 
 65、arping -c 1 -I eth0 10.0.0.6   ##解析mac地址
 
-66、yum的用法
-    yum安装卸载命令，
-    yum install 'package_name'
-    yum remove 'package_name'
-    
-    yum查询想要安装的包
-    yum search 'keyword'
-    例如yum search messenger
-    
-    模糊搜索本地yum包
-    yum list | grep packageName
-    
-    列出所有可安装的软件包
-    yum list
-    
-    列出所有可更新的软件包
-    yum list updates
-    
-    列出所有已安装的软件包
-    yum list installed
-    
-    列出所有已经安装但不在repository的包
-    yum list extras
-    
-    另有命令查看软件包的详细信息
-    yum info ..
-    
-    
-    清除yum缓存
-    yum clean ..
-  
-  
-  加快yun速度，使用yum-plugin-fastestmirror
-  yum -y install yum-plugin-fastestmirror
+66、time curl -vl -o /dev/null  ###统计curl的时间
 
-
+   
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
   man hosts linux的配置文件的帮助
@@ -518,3 +485,39 @@ RT ! [rejected] master -> master (fetch first)
 方法：
 a.--> git pull origin master
 b.--> git push origin master
+
+十一、
+    yum的用法
+    yum安装卸载命令，
+    yum install 'package_name'
+    yum remove 'package_name'
+    
+    yum查询想要安装的包
+    yum search 'keyword'
+    例如yum search messenger
+    
+    模糊搜索本地yum包
+    yum list | grep packageName
+    
+    列出所有可安装的软件包
+    yum list
+    
+    列出所有可更新的软件包
+    yum list updates
+    
+    列出所有已安装的软件包
+    yum list installed
+    
+    列出所有已经安装但不在repository的包
+    yum list extras
+    
+    另有命令查看软件包的详细信息
+    yum info ..
+    
+    
+    清除yum缓存
+    yum clean ..
+  
+  
+  加快yun速度，使用yum-plugin-fastestmirror
+  yum -y install yum-plugin-fastestmirror
