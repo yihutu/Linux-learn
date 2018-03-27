@@ -135,6 +135,7 @@ vim中常用的替换信息命令格式
    -F 指定分隔符-菜刀 field separator  
    -F ","     以逗号为菜刀
    -F "[ ,]"  以空格或者逗号为菜刀  
+   cat ceshi.txt | awk -F '0' '{print $1}'  ##以字符0为分隔符
 
 20.ifup  启动某一块网卡
    ifup eth0 
