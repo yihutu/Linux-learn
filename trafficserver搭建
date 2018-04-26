@@ -1,0 +1,136 @@
+
+网络虚拟机是桥接模式
+
+1.安装依赖包
+yum install gcc gcc-c++ pkgconfig pcre-devel tcl-devel expat-devel openssl-devel -y
+yum install perl-ExtUtils-MakeMaker -y
+sudo yum install libcap libcap-devel hwloc hwloc-devel -y
+sudo yum install libunwind libunwind-devel -y
+yum install autoconf automake libtool -y
+sudo yum install git -y
+
+2.下载并解压
+cd /usr/local/src
+官网下载trafficserver_5.3.0.tar.bz2 
+https://trafficserver.apache.org/到官网下5.3.0版本  注意：5.3.0+ 可能对Linux版本有要求 
+tar -jxvf trafficserver_5.3.0.tar.bz2 
+cd trafficserver-4.2.3
+
+
+3.编译安装：
+mkdir -p /opt/ats
+新建用户和组
+useradd -s /sbin/nologin tserver
+编译安装：
+./configure --prefix=/opt/ats --with-user=tserver --with-group=tserver --enable-debug --enable-experimental-plugins --enable-example-plugins --enable-hwloc
+make && make install
+
+
+4.修改配置文件record.conf：直接完整拷贝
+CONFIG proxy.config.proxy_name STRING hk_ats111
+CONFIG proxy.config.http.response_server_str STRING ats1
+CONFIG proxy.config.http.response_via_str STRING ats2
+CONFIG proxy.config.http.request_via_str STRING ats3
+CONFIG proxy.config.cache.min_average_object_size INT 8000
+CONFIG proxy.config.cache.ram_cache.algorithm INT 1
+#hot 10MRAM
+#CONFIG proxy.config.cache.ram_cache.size INT 10485760
+CONFIG proxy.config.cache.ram_cache.size INT 1048576
+CONFIG proxy.config.cache.ram_cache_cutoff INT 4194304
+CONFIG proxy.config.diags.show_location INT 1
+CONFIG proxy.config.hostdb.timeout INT 2
+CONFIG proxy.config.hostdb.ttl_mode INT 1
+CONFIG proxy.config.http.cache.cache_responses_to_cookies INT 1
+CONFIG proxy.config.http.cache.ignore_client_no_cache INT 1
+CONFIG proxy.config.http.cache.required_headers INT 0
+CONFIG proxy.config.http.insert_response_via_str INT 2
+CONFIG proxy.config.http.server_ports STRING 8080
+#复用server session
+#CONFIG proxy.config.http.share_server_sessions INT 2
+#定制log
+CONFIG proxy.config.log.custom_logs_enabled INT 1
+CONFIG proxy.config.log.max_space_mb_for_logs INT 25000
+CONFIG proxy.config.log.rolling_enabled INT 1
+CONFIG proxy.config.log.rolling_size_mb INT 10
+CONFIG proxy.config.log.squid_log_enabled INT 0
+CONFIG proxy.config.log.xml_config_file STRING logs_xml.config
+CONFIG proxy.config.log.max_line_size INT 35000
+CONFIG proxy.config.log.log_buffer_size INT 262144
+#同时能处理多少个链接
+CONFIG proxy.config.net.connections_throttle INT 30000
+#反向代理必须跟remap配置文件配合使用才能缓存 一般正向代理不走remap配置文件
+#配置pristine为0 和remap_required 即关闭纯正向代理
+CONFIG proxy.config.reverse_proxy.enabled INT 0
+CONFIG proxy.config.ssl.number.threads INT 0
+CONFIG proxy.config.task_threads INT 2
+#1为只服务remap配置文件中的请求 即反向代理
+#0 当开启正向代理 + 非只服务remap中的请求 即正向+反向代理
+CONFIG proxy.config.url_remap.remap_required INT 0
+CONFIG proxy.config.cache.enable_read_while_writer INT 2
+CONFIG proxy.config.http.insert_request_via_str INT 1
+CONFIG proxy.config.http.anonymize_insert_client_ip INT 1
+#请求源站时 把client_ip信息插入到xff首部中
+CONFIG proxy.config.http.insert_squid_x_forwarded_for INT 1
+CONFIG proxy.config.body_factory.template_sets_dir STRING etc/trafficserver/body_factory
+#########################################################################
+#pristine默认为 0 
+CONFIG proxy.config.url_remap.pristine_host_hdr INT 1
+#CONFIG proxy.config.output.logfile STRING traffic.out
+#debug开关 1是开启
+CONFIG proxy.config.diags.debug.enabled INT 1
+CONFIG proxy.config.diags.debug.tags STRING dns_pas
+CONFIG proxy.config.url_remap.filename STRING remap.config
+CONFIG proxy.config.cache.control.filename STRING cache.config
+CONFIG proxy.config.http.connect_attempts_timeout INT 10
+CONFIG proxy.config.hostdb.ip_resolve STRING ipv4
+CONFIG proxy.config.dns.splitDNS.enabled INT 0
+
+-----------------------------------------------------------------------------------------------------------------
+
+5.修改logs_xml.conf文件
+[root@bogon trafficserver]# cat logs_xml.config
+<LogFormat>
+  <Name = "intcache_log"/>
+  <Format = "%<cqtq> %<ttms> %<pssc> [%<cqtt>] %<{X-Forwarded-For}cqh> \"%<cqtx>\" %<psql> \"%<pqsi>\" %<crc>:%<phr> %<{Referer}cqh> \"%<{User-Agent}cqh>\" %<psct>"/>
+</LogFormat>
+
+<LogObject>
+  <Format = "intcache_log"/>
+  <Filename = "access"/>
+  <RollingEnabled = "3"/>
+  <RollingIntervalSec = "86400"/>
+  <RollingOffsetHr = "0"/>
+  <RollingSizeMb = "2000"/>
+</LogObject>
+
+6.加好后trafficserver restart
+看看能不能起来
+然后看看 日志
+
+7.没有access.log日志  ##报错
+修改
+[root@bogon ~]# cat ~/.bashrc
+# .bashrc
+
+# User specific aliases and functions
+
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+alias ats_log='cd /opt/ats/var/log/trafficserver;pwd'  ##修改
+alias ats_db='cd /opt/ats/var/trafficserver;pwd'
+alias ats_bin='cd /opt/ats/bin;pwd'
+alias ats_conf='cd /opt/ats/etc/trafficserver;pwd'  ##修改
+alias ats_lib='cd /opt/ats/libexec/trafficserver;pwd'  ##修改
+alias ats_stat='ps auxf | grep traffic | grep -v grep'
+alias ats_ports='netstat -nltp | grep traffic | grep -v grep'
+
+8.测试：
+手机联无线WiFi，修改WiFi代理网络为trafficserver的外网IP端口为8080,要是在本地测试没有外网IP就用内网可以连接的IP
+查看access.log日志
+注：家庭网络没有80端口，因为不能用作服务网络
