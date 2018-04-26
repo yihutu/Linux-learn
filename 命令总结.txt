@@ -302,7 +302,10 @@ ps -ef 查看系统进程信息
 
 66、time curl -vl -o /dev/null  ###统计curl的时间
 
-   
+67、 抓取所有网卡10行http包
+tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E "GET|Host" -C 10
+tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E "Range" -C 10  ##抓分片
+
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
   man hosts linux的配置文件的帮助
