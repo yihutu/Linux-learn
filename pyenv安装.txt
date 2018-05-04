@@ -121,8 +121,10 @@ pyenv version ##查看修改的版本
 如果要删除这个虚拟环境，只须直接删除它所在的目录即可：
 rm -rf .pyenv/versions/env361
 
+13、pyenv升级：
+pyenv update
 
-13、pip通用配置===yum（包管理器）
+14、pip通用配置===yum（包管理器）
 使用pip命令在env353的虚拟环境下安装ipython和redis模块
 在mumu（已经应用test353虚拟环境）目录下
 pip -v ##查看pip详情
@@ -142,7 +144,7 @@ site-packages以后安装的模块都在这里
 pip 9.0.1 from /home/Python/.pyenv/versions/3.5.3/lib/python3.5/site-packages (python 3.5)
 
 
-14、创建pip配置文件,加速下载，不去官网使用阿里镜像
+15、创建pip配置文件,加速下载，不去官网使用阿里镜像
 (test353) [Python@bogon mumu]$ mkdir .pip
 (test353) [Python@bogon mumu]$ ls -a
 .  ..  .pip  .python-version
@@ -153,7 +155,7 @@ pip 9.0.1 from /home/Python/.pyenv/versions/3.5.3/lib/python3.5/site-packages (p
 index-url=https://mirrors.aliyun.com/pypi/simple/
 trusted-host=mirrors.aliyun.com
 
-15、安装redis和ipython以及jupyter
+16、安装redis和ipython以及jupyter
 (test353) [Python@bogon mumu]$ pip install redis   ##服务只在当前虚拟环境，操作也在当前虚拟环境
 (test353) [Python@bogon mumu]$ pip install ipython
 (test353) [Python@bogon mumu]$ pip install jupyter  ##Jupyter Notebook（此前被称为 IPython notebook ipython的网页版）是一个交互式笔记本，
@@ -182,7 +184,7 @@ jupyter-notebook --ip=0.0.0.0
 在 mumu/下创建 test.txt浏览器版会出现这个文件
 
 
-16、打包test353环境
+17、打包test353环境
 (test353) [Python@bogon mumu]$ pip freeze >wangzhan.txt
 You are using pip version 9.0.1, however version 10.0.1 is available.
 You should consider upgrading via the 'pip install --upgrade pip' command.
@@ -190,7 +192,7 @@ You should consider upgrading via the 'pip install --upgrade pip' command.
 Untitled.ipynb  wangzhan.txt
 
 
-17、安装test353开发环境到新的虚拟环境：
+18、安装test353开发环境到新的虚拟环境：
 (test353) [Python@bogon mumu]$ mv wangzhan.txt /home/Python/project/test/
 (test361) [Python@bogon test]$ pip install -r wangzhan.txt
 (test361) [Python@bogon test]$ netstat -nlput
