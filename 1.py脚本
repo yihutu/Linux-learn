@@ -66,7 +66,6 @@ def request(url, _dns):
         down_size    = c.getinfo(pycurl.SIZE_DOWNLOAD)
         down_speed   = c.getinfo(pycurl.SPEED_DOWNLOAD)
         ip_result = get_ip(primary_ip)
-        #if ip_result == '111.194.248.195':
         #print "-------------------------------------------------------------------------------------------"
         print "url : %s" % url
         print "http_code lookup_time connect_time first_time total_time down_size down_speed desip result"
