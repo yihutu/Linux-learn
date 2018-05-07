@@ -1,0 +1,29 @@
+主要参考 http://blog.csdn.net/wangxiaobupt/article/details/31778351
+
+1、首先安装python2.7版本
+安装：Windows x86-64 MSI installer ##选择本地安装就自动写变量环境
+
+2、注册register
+http://www.cnblogs.com/thinksasa/archive/2013/08/26/3283695.html
+register.py 把这个文件放入好找的路径
+python register.py ##运行这个文件
+
+3、下载setuptools
+https://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11.win32-py2.7.exe
+下一步 下一步 安装完成后把;C:\Python27\Scripts添加到系统环境变量PATH中
+
+4、在cmd下 输入easy_install pycurl 发现不行
+
+5、下载libcurl库
+http://www.lfd.uci.edu/~gohlke/pythonlibs/ 下载pycurl-7.43.0-cp27-cp27m-win_amd64.whl后python运行即可
+
+6、运行上一步结果有报错说缺少这个--main--可以这样  
+pip install wheel
+pip install c:\Python27\pycurl-7.43.0-cp27-cp27m-win_amd64.whl
+pip install pycurl
+
+7、在cmd下 输入easy_install pycurl 安装ok
+
+
+之后把1.py放在根目录并创建url.txt，运行python 1.py url.txt就得出结果了
+
