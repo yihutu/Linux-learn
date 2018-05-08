@@ -14,7 +14,7 @@ cd /usr/local/src
 官网下载trafficserver_5.3.0.tar.bz2 
 https://trafficserver.apache.org/到官网下5.3.0版本  注意：5.3.0+ 可能对Linux版本有要求 
 tar -jxvf trafficserver_5.3.0.tar.bz2 
-cd trafficserver-4.2.3
+cd trafficserver-5.3.0
 
 
 3.编译安装：
