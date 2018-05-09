@@ -134,3 +134,7 @@ alias ats_ports='netstat -nltp | grep traffic | grep -v grep'
 手机联无线WiFi，修改WiFi代理网络为trafficserver的外网IP端口为8080,要是在本地测试没有外网IP就用内网可以连接的IP
 查看access.log日志
 注：家庭网络没有80端口，因为不能用作服务网络
+
+9、统计域名
+awk '$7~/(jpg|jepg|png|gif|js)/{ split($7, arr, "/"); print arr[3];}' access.log | sort | uniq 
+awk '$7~/(jpg|jepg|png|gif|js)/{ split($7, arr, "/"); print arr[3];}' access.log | sort | uniq > pic_domain.txt
