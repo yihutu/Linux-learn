@@ -104,6 +104,7 @@ CONFIG proxy.config.dns.splitDNS.enabled INT 0
 </LogObject>
 
 6.加好后trafficserver restart
+/opt/ats/bin/trafficserver restart
 看看能不能起来
 然后看看 日志
 
@@ -133,6 +134,7 @@ alias ats_ports='netstat -nltp | grep traffic | grep -v grep'
 8.测试：
 手机联无线WiFi，修改WiFi代理网络为trafficserver的外网IP端口为8080,要是在本地测试没有外网IP就用内网可以连接的IP
 查看access.log日志
+/opt/ats/var/log/trafficserver/access.log
 注：家庭网络没有80端口，因为不能用作服务网络
 
 9、统计域名
