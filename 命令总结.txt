@@ -306,6 +306,10 @@ ps -ef 查看系统进程信息
 tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E "GET|Host" -C 10
 tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E "Range" -C 10  ##抓分片
 
+68、分析域名的443端口通不通，要是443通的话就不做缓存
+[root@bogon ~]# nc -zv -w 5 baidu.com 443
+Connection to baidu.com 443 port [tcp/https] succeeded!  
+
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
   man hosts linux的配置文件的帮助
