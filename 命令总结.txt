@@ -313,6 +313,9 @@ Connection to baidu.com 443 port [tcp/https] succeeded!
 69、过滤时间段17:10和17:20
 cat access.log | grep -E '\[17:0[0-9]|\[17:2[0-9]' | grep 'domain' | wc -l
 
+70、过滤第2、9、11列且第2列大于100，并正向排序
+cat 1.txt  | awk  '($2 > 100){print $2,$5,$9,$11}' | sort
+
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
   man hosts linux的配置文件的帮助
