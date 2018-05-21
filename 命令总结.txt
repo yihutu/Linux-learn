@@ -324,8 +324,14 @@ cat 1.txt  | sort -nr
 curl -s http://127.0.0.1/nginx_status
 icget_conn 
  
-72、查看实时数据
-tsar -l -i 1 查看1秒钟实时数据
+72、tsar服务
+tsar 可以监控CPU、IO、内存、TCP等系统状态，也可监控Apache、Nginx/Tengine、Squid等服务器状态。
+-L  查看可用的模块列表
+-s 指定字段,tsar --cpu -s sys,util查看多个模块的不同指定字段 
+-l 查看实时数据
+tsar -l  --cpu  ##查看 指定模块的实时信息
+tsar -l -i 1  ##查看1秒钟实时数据
+http://blog.itpub.net/22664653/viewspace-1273519/
 
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
