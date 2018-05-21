@@ -319,6 +319,10 @@ cat 1.txt | awk '($2>1000){print $2,$5,$7,$11}' | sort -n  ##按数字大小正
 cat 1.txt | awk '($2>1000){print $2,$5,$7,$11}' | sort -nr ##按数字大小倒叙
 awk -F'/' '{print $3}' 1.txt | sort | uniq -c | sort -nr
 cat 1.txt  | sort -nr
+
+71、统计用户访问
+curl -s http://127.0.0.1/nginx_status
+icget_conn 
  
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
