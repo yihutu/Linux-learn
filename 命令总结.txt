@@ -333,6 +333,10 @@ tsar -l  --cpu  ##查看 指定模块的实时信息
 tsar -l -i 1  ##查看1秒钟实时数据
 http://blog.itpub.net/22664653/viewspace-1273519/
 
+73、统计排名前几位
+awk '{print $8}' 1.txt |sort|uniq -c |sort -nrk1>aaa
+grep -c "domain" 1.txt ##统计域名出现的次数
+
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
   man hosts linux的配置文件的帮助
