@@ -337,6 +337,9 @@ http://blog.itpub.net/22664653/viewspace-1273519/
 awk '{print $8}' 1.txt |sort|uniq -c |sort -nrk1>aaa
 grep -c "domain" 1.txt ##统计域名出现的次数
 
+74、统计域名流量
+cat access.log |awk '$1>= 1527843720 && $1<1527843840'| awk '{split($7, s, "/"); print s[3], $9}' | awk '{a[$1]+=$2;} END{for(i in a) print i,a[i];}' |sort -k2rn|head -30 
+
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
   man hosts linux的配置文件的帮助
