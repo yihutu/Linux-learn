@@ -346,6 +346,11 @@ cat access.log |awk '$1>= 1527843720 && $1<1527843840'| awk '{split($7, s, "/");
  76、统计某个时间到某个时间段的所有请求日志
  sed -n '/1528164000/,/1528167598/p' /var/log/messages | wc -l ##以时间戳为条件
 
+77、抓包打包成wirshark包
+tcpdump -i bond0 'tcp' -w 1_1132.pcap
+
+78、压缩
+xz 1_1132.pcap
 
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
