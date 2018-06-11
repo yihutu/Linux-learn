@@ -358,6 +358,9 @@ cat  access.log | grep -v ':443' | grep -E 'bmp|jpg|imag|png|gif|jpeg|webp' | aw
 80、文件中数据是由一个或者制表位（多个空格）分隔开的，将这些空格替换为空格（特定字符也可以）。
    sed -e 's/[[:space:]][[:space:]]*/ /g' 6.8.txt 
 
+81、命令使用
+awk '($1>=1528419600 && $1<1528426799)' access.log|ats_access_parse.pl >aaaaaaaaaaa
+
 
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
