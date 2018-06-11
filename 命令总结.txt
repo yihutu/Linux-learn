@@ -352,6 +352,13 @@ tcpdump -i bond0 'tcp' -w 1_1132.pcap
 78、压缩
 xz 1_1132.pcap
 
+79、过滤图片资源
+cat  access.log | grep -v ':443' | grep -E 'bmp|jpg|imag|png|gif|jpeg|webp' | awk -F / '{print $3}'| sort|uniq -c|sort -nrk1
+
+80、文件中数据是由一个或者制表位（多个空格）分隔开的，将这些空格替换为空格（特定字符也可以）。
+   sed -e 's/[[:space:]][[:space:]]*/ /g' 6.8.txt 
+
+
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
   man hosts linux的配置文件的帮助
