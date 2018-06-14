@@ -356,8 +356,9 @@ xz 1_1132.pcap
 cat  access.log | grep -v ':443' | grep -E 'bmp|jpg|imag|png|gif|jpeg|webp' | awk -F / '{print $3}'| sort|uniq -c|sort -nrk1
 
 80、文件中数据是由一个或者制表位（多个空格）分隔开的，将这些空格替换为空格（特定字符也可以）。
-   sed -i 's/[[:space:]][[:space:]]*/ /g' 6.8.txt 
-
+   sed -i 's/[[:space:]][[:space:]]*/ /g' 6.8.txt  ##把tab替换成空格
+   sed -i  's/ /\x09/g'  pingduoduo.txt  ##把空格替换成tab
+   
 81、命令使用
 awk '($1>=1528419600 && $1<1528426799)' access.log|ats_access_parse.pl >aaaaaaaaaaa
 
