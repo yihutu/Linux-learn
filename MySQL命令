@@ -1,0 +1,543 @@
+select table_schema from information_schema.tables where table_name='表名'; ##查询表属于那个库
+
+show grants for 'root'@'localhost';  ##查看用户授权权限信息,root或localhost有特殊字符需要加单引号
+show create user root@localhost;  ##查看用户的其他非授权信息
+
+
+创建用户并授权
+create user abc@localhost identified by 'mysql'； ##创建一个abc用户密码为MySQL
+grant select on test.* to abc@localhost;  ##赋予test数据库下的查询权限（推荐）
+abc用户登陆test数据库，查询数据库下的表信息，但没有修改权限
+修改权限的两种方式：
+1、grant 修改
+2、修改系统权限表
+select * from MySQL.db where user='abc' and host='localhost'; 查看abc用户的权限
+update mysql.db set Insert_priv='Y' where user='abc' and host='localhost'; ##修改系统表赋予abc用户Insert_priv权限
+flush privilege ##把权限刷新到内存中，因为修改了权限表
+insert into temp values(abc,3); ##插入数据
+grant select(id) on test.temp to abc@localhost; ##指test的temp表的id字段上有查询权限
+selec id from temp; 查看id字段
+
+grant identified by 创建并授权
+creat 创建用户 grant 授权 ##推荐
+
+回收权限：
+revoke insert on test.* from abc@localhost; ##回收abc用户在test库中的insert权限
+
+删除用户：
+drop user 'name'@'localhost';彻底删除某个用户
+
+show full processlist; 查看当前数据库连接
+
+数据库连接：
+MySQL -u name -ppassword db_name
+
+
+查看表数据：
+desc temp； ##查看表数据
+
+
+MySQL用户资源限制（企业中不常见）
+
+
+Columns_priv 列级别如何定义
+
+grant select(name) on course.temp to cdq@localhost;  ##列级别定义，最细列级别
+select * from temp； 查询不了，没有字段权限
+
+针对列级别，敏感信息过滤
+
+创建用户同一大小写
+
+
+有来源地的限制
+
+设置MySQL用户的密码（见课件）
+设置MySQL用户密码过期策略（见课件）
+怀疑数据库用户被盗用，强制密码过期，让用户修改密码
+alter user abc@localhost password expire; ##强制用户修改密码
+MySQL用户lock 用户锁住
+alter user cdq@localhost account lock; ##锁住用户
+alter user cdq@localhost account unlock; #解锁用户
+
+修改root密码
+
+企业中常规的MySQL用户
+密码生成器生成复杂密码
+
+并没有创建新的数据库，只是命令不报错了
+
+auto_increment 一般定义主键
+
+
+一张表主键只有一个，唯一键可以有多个
+主键只能在非空字段加，唯一键可以空字段加
+
+
+创建数据库：
+create database test; ##创建数据库（推荐）
+create schema 
+create database if not exists  test；
+select database(); ##查看当前所在数据库
+use test；
+在数据库目录创建一个文件夹，MySQL启动会把这个目录认成数据库
+create table B1(ID int,name varchar(10));  ##创建表，表结构为
+desc B1  ##查看表结构
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int(11)     | YES  |     | NULL    |       |
+| name  | varchar(10) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+create table students2(sid int,sname varchar(10));
+第一个字段叫sid（叫id也行） int数据类型属性（意思是用整形的数据来存储）
+第二个字段叫sname（自定义），varchar数据类型属性（变长字符串类型）
+varchar（10）最大可存储10个字符
+
+create table test3.students2(sid int,sname varchar(10)); ##在test3这个数据库下创建students2表
+
+创建临时表
+temporary  ##存储一些中间结果集，看不到这张表
+create temporary table temp1(sid int,sname varchar(10));
+insert into temp1 values(1,'a');  ##插入数据
+select * from temp1；查询这个表
+只能自己看，只在本次链接生效
+比如
+insert into temp1 select id,name from temp where id=3;  ##把temp表中id等于3的数据插入temp1这个临时表中
+
+关键词like
+Like关键词表示基于另外一个表的定义复制一个新的空表，空表上的字段属性和索
+引都和原表相同
+创建新表时复制老表的表结构
+like和as select创建表的区别
+like创建新表时复制老表的表结构，字段和索引和原表一样，但没有数据
+show create table temp; ##查询表的属性
+insert into temp values('a',1,'b');  ##插入id1
+create table temp_like like temp;  ##like拷贝temp表结构到temp_like
+也需要手工赋予权限
+
+as select使用,做数据同步
+create table temp_select as select * from temp;  ##字段属性有，union key不会拷贝但会拷贝数据
+create table temp_select2 as select * from temp where id>10; ##只把temp表中id大于10的拷贝过来
+create table temp_select3 as select id,name from temp where id>10; ##复制字段为id和name并且id大于10的数据
+
+create table关键词
+data_type 
+not null/null  ##字段可空和非空
+create table students(id int,name varchar(10)) not null,name2 varchar(10) null);
+##创建student表name字段不能为空，name2字段可以为空
+mysql> desc students;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(11)     | YES  |     | NULL    |       |
+| name  | varchar(10) | NO   |     | NULL    |       |
+| name2 | varchar(10) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+insert into students(id,name,name2) values(1,'abc','a');  ##在students表中插入id为1 name为abc name2为a的数据
+##插入数据必须在name上插入一个值或者默认值因为它是非空字段
+
+create table student2(id int,name varchar(10) not null default 'b',name2 varchar(10) null);
+##创建一个新表students2表格是name指定默认值为b
+insert into student2(id,name2) values(1,'a'); ##student2插入id为1，name2为a的值
+mysql> select * from student2;
++------+------+-------+
+| id   | name | name2 |
++------+------+-------+
+|    1 | b    | a     |
++------+------+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into student2(id,name,name2) values(1,'abc','a'); ##也可以在name上指定值
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from student2;
++------+------+-------+
+| id   | name | name2 |
++------+------+-------+
+|    1 | b    | a     |
+|    1 | abc  | a     |
++------+------+-------+
+2 rows in set (0.00 sec)
+
+insert into student2(id,name,name2) values(1,default,'a');  ##用关键字插入
+
+
+auto_increment 计速器
+递增字段必须是key
+create table student4(sid int auto_increment primary key,sname varchar(10));  ##把sid定义成主键并且递增
+Query OK, 0 rows affected (0.41 sec)
+
+mysql> desc student4;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| sid   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| sname | varchar(10) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.01 sec)
+
+mysql> insert into student4(sname) values('a'); ##sid会自动生成并递增
+mysql> insert into student4(sname) values('a');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student4(sname) values('a');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student4(sname) values('a');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student4;
++-----+-------+
+| sid | sname |
++-----+-------+
+|   1 | a     |
+|   2 | a     |
+|   3 | a     |
+|   4 | a     |
++-----+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into student4(sid,sname) values(100,'a');  ##也可以指定sid的值
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student4;
++-----+-------+
+| sid | sname |
++-----+-------+
+|   1 | a     |
+|   2 | a     |
+|   3 | a     |
+|   4 | a     |
+| 100 | a     |
++-----+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into student4(sname) values('a');  ##递增会从100开始递增
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student4;
++-----+-------+
+| sid | sname |
++-----+-------+
+|   1 | a     |
+|   2 | a     |
+|   3 | a     |
+|   4 | a     |
+| 100 | a     |
+| 101 | a     |
++-----+-------+
+6 rows in set (0.00 sec)
+
+
+unique和primary key的区别：
+primary key 主键非空并且唯一
+unique 可以为空值，可以在同一张表定义多个
+
+create unique index un_1 on student4(sid);  ##约束条件
+create unique index un_2 on student4(sname);
+insert into student4(sname) values('a');
+insert into student4(sname) values('a');
+报错，因为被unique约束了，不能在sname上创建相同的值
+insert into student4(sname) values('NULL');
+insert into student4(sname) values('NULL');
+不报错，因为NULL是未知值，不受unique约束
+
+
+两张表之间数据引用
+create table 'gender'(id int(11)not null,name varchar(10) default null,primary key(id));  ##报错了
+create table grender(id int not null primary key,name varchar(10)); 正确
+##创建一个gender表gender_id为整数型字段最大为11不能为空并且被定义为主键，
+引用其他表的字段必须是一个key,unique和primary都可以
+create table students5(sid int,sname varchar(10),gender_id int,constraint for_1 foreign key(gender_id) references gender(id))
+
+mysql> show create table student5;
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                                                                                                                                                      |
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| student5 | CREATE TABLE `student5` (
+  `sid` int(11) DEFAULT NULL,
+  `sname` varchar(10) DEFAULT NULL,
+  `grender_id` int(11) DEFAULT NULL,
+  KEY `for_1` (`grender_id`),
+  CONSTRAINT `for_1` FOREIGN KEY (`grender_id`) REFERENCES `grender` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> desc student5;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| sid        | int(11)     | YES  |     | NULL    |       |
+| sname      | varchar(10) | YES  |     | NULL    |       |
+| grender_id | int(11)     | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+mysql> insert into grender values(1,'male');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into grender values(2,'female');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student5 values(1,'a',1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from student5;
++------+-------+------------+
+| sid  | sname | grender_id |
++------+-------+------------+
+|    1 | a     |          1 |
++------+-------+------------+
+1 row in set (0.00 sec)
+
+RROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`test`.`student5`, CONSTRAINT `for_1` FOREIGN KEY (`grender_id`) REFERENCES `grender` (`id`))
+mysql> insert into grender values(0,'unknow');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student5 values(2,'b',0);
+Query OK, 1 row affected (0.01 sec)
+
+外键是说：我的数据，尤其是引用字段的数据的来源一定要是引用的附表这一列的数据，如果附表没有就提示报错
+
+
+create table teacher(id int auto_increment primary key,name varchar(64),dept_id int,constraint for_2 foreign key(dept_id) references dept(id));  
+##引用外表，id整型自增字段主键， name字符串64位， dept_id整型外键到dept表的id字段
+
+insert 插入数据：
+三种写法
+insert into students values(1,'aaaa');  ##插入具体值每个字段的值都知道，顺序与表结构匹配
+insert into students set sid=2,sname='bbbb'; ##类似于第一种写法，每个字段也写清楚
+insert into students selec * from students_bak; ##students_bak这个表已经有了，把students_bak中的数据copy到students中，表大不合适使用，注意顺序
+
+mysql> insert into test select * from dept;
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from test;
++------+------+
+| id   | name |
++------+------+
+|    1 | d    |
+|    1 | a    |
+|    2 | b    |
+|    3 | c    |
++------+------+
+4 rows in set (0.00 sec)
+
+
+mysql> show create table students;
++----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                                                                                                                                                                                                             |
++----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| students | CREATE TABLE `students` (
+  `sid` int(11) NOT NULL AUTO_INCREMENT,
+  `sname` varchar(64) DEFAULT NULL,
+  `gender` varchar(12) DEFAULT NULL,
+  `dept_id` int(11) NOT NULL,
+  PRIMARY KEY (`sid`),
+  KEY `for_1` (`dept_id`),
+  CONSTRAINT `for_1` FOREIGN KEY (`dept_id`) REFERENCES `dept` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+因为dept_id字段不能为空所以在这里插入数据
+insert into students(dept_id) values(3);
+
+insert 计算数字
+insert into students(sid,sname) values(4,'ddd');
+insert into students(sid) values(5);
+insert into students(sname) values('eee');
+insert into students values(2*3,'fff');  ##value必须是一个明确的值
+
+insert into students(sname,gender,dept_id) values('b',1,3),('c',2,3),('d',3,3);  ##插入多条数据
+insert ignore into students(sname,gender,dept_id) values('b',1,3),('c',2,3),('d',3,3); ##不正确的数据不会插进去
+
+show warnings; ##查看告警信息
+
+
+mysql> insert into test select * from test;  ##原表数据再拷贝一次，追加到原表中（不会死循环），但是主键的是不可以的重复的
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from test;
++------+------+
+| id   | name |
++------+------+
+|    1 | d    |
+|    1 | a    |
+|    2 | b    |
+|    3 | c    |
+|    1 | d    |
+|    1 | a    |
+|    2 | b    |
+|    3 | c    |
++------+------+
+8 rows in set (0.00 sec)
+
+
+mysql> insert into students(sname,gender,dept_id) select sname,gender,dept_id from students; ##查询和插入数据都跳过主键
+
+
+duplicate key updata
+如果碰到当前插入的数据违反主键或唯一键的唯一性约束，则Insert会转变成update语句修改对应的已经存在表中的这条数据。
+insert into table (a,b,c) values(1,2,3) on duplicate key updata c=c+1;  ##如果表里已经有1这个数据就把insert语句转换成update语句，且1这个数据在加上1
+违反主键
+insert into students(sid,sname,dept_id) values(20,'bcd',3) on duplicate key updata sname='bcd';
+就等于update students set sname='bcd' where sid=20;  ##sid等于20的sname会修改成bcd
+##不会报主键冲突，（如果违反了主键约束）会转换成update语句
+insert into students(sid,sname,dept_id) values(20,'bcd',3) on duplicate key updata sname='bcd',gender=5;
+
+违反多个唯一键
+当在a和b字段都违反了唯一键的时候
+updata table set c=c+1 where a=1 or b=2 limit 1; ##会修改a=1或者b=2其中任何一个符合条件的语句，limit 1修改1条，结果不可控
+
+
+create table teacher_backup like teacher;  ##
+
+
+updata ##修改表中已经存在的数据，修改多表不常用
+update students set sname='abcd',gender='1' where sid=1;  ##生成环境中再三确认有么有where条件
+updata students,students2
+set students.sname=students2.sname,students.gender=students2.gender where students.sid=students2.sid;
+
+mysql> update dept set dept_name='bbbb' where id=2; ##修改id=2的dept_name的内容为bbbb，修改内容特殊字符单引号必须加
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from dept;
++----+-----------+
+| id | dept_name |
++----+-----------+
+|  1 | a         |
+|  2 | bbbb      |
+|  3 | c         |
++----+-----------+
+3 rows in set (0.00 sec)
+
+课堂习题语句：
+1、
+create database course;
+create table dept(id int primary key auto_increment,dept_name varchar(64));
+create table students(sid int primary key auto_increment,sname varchar(64),gender varchar(12),dept_id int not null,constraint for_2 foreign key(dept_id) references dept(id));
+create table teacher(id int primary key auto_increment,name varchar(64),dept_id int not null,foreign key(dept_id) references dept(id));
+create table course(id int primary key auto_increment,course_name varchar(64),teacher_id int,foreign key(teacher_id) references teacher(id));
+
+2、
+insert into dept values(1,'computer science'),(2,'education'),(4,'accounting');
+create table teacher_backup like teacher;
+insert into teacher_backup values(1,'susan',1),(2,'ruth',4),(3,'vivian',4);
+insert into teacher select * from teacher_backup;
+
+3、
+update students set dept_id=2 where sid<=100;
+update teacher set name='carey' where name='ruth' and id >=100 and id<=200;
+update teacher set name='carey' where name='ruth' and id between 100 and 200;
+
+
+4、
+delete from students where sid>200;
+delete from teacher where dept_id=4;
+
+
+updata 用于修改已存在的数据
+
+单表修改与多表修改
+
+set 修改成什么样 where修改的范围
+
+update students set sname='abcd',gender='1' where sid=1;
+修改表 修改字段 多个字段逗号分隔 where 修改数据范围
+
+不带where条件就把所有的数据都修改掉
+
+修改多表
+set students.sname=students2.sname,students.gender=students2.gender
+• where students.sid=students2.sid;  ##修改两张表，两表之间的关系是社么？
+
+update teacher,teacher_backup
+set teacher_backup.name=teacher.name,
+teacher_backup.dept_id=teacher.dept_id
+where teacher.id=teacher_backup.id;
+
+加上where 可以定义修改数据的联系，就是关联操作
+
+常规用到的是单表修改
+
+
+其中任意一条把name修改成abc
+任意一条就是limit 1 如果是两条是 limit 2
+
+基于id最大的那条修改成bcd
+order by id desc limit 1 倒叙排序就是id最大的那条
+
+
+id 从3开始递增，因为之前的数据已经有3了，所以排序从倒叙开始相加
+update teacher_backup set id=id+2 order by id desc; ##不是循环执行，是一次执行完的
+
+
+delete 删除已存在的增行数据
+
+
+删除排序数据
+
+多表删除（不常用）
+
+
+基于时间锉删除时间最老的数据
+
+
+WHERE t1.id=t2.id AND t2.id=t3.id;
+
+delete from teacher_backup,teacher 
+using teacher_backup inner join teacher
+where teacher_backup.id=teacher_id and teacher.name='susan';
+
+别名使用
+
+delete from teacher,teacher_backup using teacher inner join teacher_backup where teacher.name=teacher_backup.name and teacher_backup.name='accounting';
+
+select使用
+select 19999*2000 计算数字
+select * from 查看所有表中
+
+where 过滤
+
+group by   分组函数
+having 分组玩过滤
+
+inner join 一张表与另一张表做关联
+select * from students inner join dept;
+
+select * from students inner join dept on students.dept_id=dept.id; 这两张表对应的关系是什么
+
+使用别名查看
+select * from students  as a inner join dept as b on students.dept_id=dept.id;别名起在from里面是可以用的
+from语句优先于select语句，from语句先执行
+
+列做别名
+表达式中可以加一些函数，把结果做下拼接，（下节课说）
+
+from语句优先于select语句，from语句先执行
+
+from table 可以指定（访问）不是当前数据库的表，只要权限给够
+select * from test2.student2; 指定库名表名访问
+
+注意：报错
+查看多张表
+
+查看分组函数
+ insert into scores
+values(1,'english',88),(1,'chinese',86),(1,'math',90),(2,'english',95),(2,'chinese',
+84);
+• select sum(score) from scores;
+• select sid,count(*),max(score),min(score),avg(score),sum(score) from scores
+group by sid;
+如果没有分组，求得合计443
+
+如果基于sid做分组
