@@ -305,6 +305,8 @@ ps -ef 查看系统进程信息
 67、 抓取所有网卡10行http包
 tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E "GET|Host" -C 10
 tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E "Range" -C 10  ##抓分片
+tcpdump -nn -i eth1 dst port 53  ##镜像网卡抓发出的包
+tcpdump -nn -i eth1 src port 53  ##镜像网卡抓回源的包
 
 68、分析域名的443端口通不通，要是443通的话就不做缓存
 [root@bogon ~]# nc -zv -w 5 baidu.com 443
