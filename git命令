@@ -1,0 +1,23 @@
+git 命令
+
+添加用户：
+git config --global user.name "your name"
+git config --global user.email "your email"
+git config --list     ##查看你的用户
+git init              ##git初始化环境
+git add README.md     ##将文件添加到暂存区域
+git commit -m "说明"     ##将文件提交到git仓库
+git commit -am "说明" ##自动帮你将工作目录中所有“已跟踪”的文件先 add 到暂存区域，然后再执行 commit 命令
+git status          ##查看git当前状态
+
+状态说明：
+On branch master 说明我们位于一个叫做“master”的分支里，这是默认的分支
+nothing to commit, working directory clean 说明你的工作目录目前是“干净的”，没有需要提交的文件
+Untracked files 说明存在未跟踪的文件（下边红色的那个）
+use "git reset HEAD <file>..." to unstage 的意思是“如果你反悔了，你可以使用 git reset HEAD 命令恢复暂存区域”。
+
+git clone https://github.com/n0tr00t/Sreg       ##git克隆一个项目
+git reset HEAD   ##把 Git 仓库的文件还原到暂存区域
+git checkout   ##命令用于把暂存区域的文件还原到工作目录
+git log    ##查看历史提交
+##Author 后边是提交者，Date 后边是提交日期，commit是ID
