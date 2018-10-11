@@ -373,6 +373,9 @@ cat a b b | sort | uniq -u
 a，b中都有的行：
 cat a b | sort | uniq -d
 
+82、查看命令属于哪个软件包
+rpm -qf `which ssh`
+
 
 一、linux下面查询帮助的方法：
 1.man 命令  命令帮助 
