@@ -382,6 +382,8 @@ tar zcf /backup/html-$(date +%F).tar.gz /var/www/html/
 84、按照指定格式输出时间
 date "+%Y-%m-%d %H:%M:%S"
 
+85、tar zchf ##h不备份软连接，备份绝对路径
+tar zchf /backup/conf-$(date +%F).tar.gz /etc/rc.local /etc/hosts /var/spool/cron/
 
 
 一、linux下面查询帮助的方法：
