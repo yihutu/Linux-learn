@@ -308,6 +308,11 @@ tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E
 tcpdump -nn -i eth1 dst port 53  ##镜像网卡抓发出的包
 tcpdump -nn -i eth1 src port 53  ##镜像网卡抓回源的包
 
+tcpdump -nnAs 0 -i 'src host 本机IP and dst host 本机IP'
+  171  tcpdump -nnAs 0 -i bond0 'src host 本机IP and dst host 本机IP'
+  172  tcpdump -nnAs 0 -i any 'src host 本机IP and dst host 本机IP'
+  
+
 68、分析域名的443端口通不通，要是443通的话就不做缓存
 [root@bogon ~]# nc -zv -w 5 baidu.com 443
 Connection to baidu.com 443 port [tcp/https] succeeded!  
@@ -384,6 +389,14 @@ date "+%Y-%m-%d %H:%M:%S"
 
 85、tar zchf ##h不备份软连接，备份绝对路径
 tar zchf /backup/conf-$(date +%F).tar.gz /etc/rc.local /etc/hosts /var/spool/cron/
+
+86、检测磁盘状态
+smartctl -H /dev/sdc 
+awk '{print $1}' storage.config | xargs -i  smartctl -H {}
+
+87、检查磁盘分区
+lsblk 
+
 
 
 一、linux下面查询帮助的方法：
