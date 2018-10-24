@@ -393,6 +393,7 @@ tar zchf /backup/conf-$(date +%F).tar.gz /etc/rc.local /etc/hosts /var/spool/cro
 86、检测磁盘状态
 smartctl -H /dev/sdc 
 awk '{print $1}' storage.config | xargs -i  smartctl -H {}
+./sas3ircu 0 display  ##也可以查看硬盘指示灯
 
 87、检查磁盘分区
 lsblk 
