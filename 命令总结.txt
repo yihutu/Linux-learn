@@ -629,5 +629,5 @@ ssh-keygen  生成（命令一路回车）
 私钥文件：id_rsa.pub
 
 A到B免密登录
-ssh-copy-id B
+ssh-copy-id B ##B中authorized_keys是A的秘钥文件，如果删除就不能免密登陆了
 ##B到A免密登录也需要生成秘钥和私钥，然后将秘钥传给A
