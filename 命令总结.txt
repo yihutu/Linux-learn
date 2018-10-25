@@ -619,3 +619,15 @@ b.--> git push origin master
   
   加快yun速度，使用yum-plugin-fastestmirror
   yum -y install yum-plugin-fastestmirror
+  
+  
+十二、  命令免密码登录：
+ssh-keygen  生成（命令一路回车）
+或者：
+##ssh-keygen -t rsa/rsa.pub  ##指定生成秘钥/私钥
+秘钥文件：id_rsa
+私钥文件：id_rsa.pub
+
+A到B免密登录
+ssh-copy-id B
+##B到A免密登录也需要生成秘钥和私钥，然后将秘钥传给A
