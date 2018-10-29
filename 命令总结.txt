@@ -398,6 +398,8 @@ awk '{print $1}' storage.config | xargs -i  smartctl -H {}
 87、检查磁盘分区
 lsblk 
 
+88、抓包
+wirshark的包文件后缀是.pcap
 
 
 一、linux下面查询帮助的方法：
