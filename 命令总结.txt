@@ -307,6 +307,8 @@ tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E
 tcpdump -nnAs 0 -i any 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420' | grep -E "Range" -C 10  ##抓分片
 tcpdump -nn -i eth1 dst port 53  ##镜像网卡抓发出的包
 tcpdump -nn -i eth1 src port 53  ##镜像网卡抓回源的包
+tcpdump -nn 0 -i p2p1  'tcp port 9011 or tcp port 80' -w 1.pcap  ##生成抓包文件
+
 
 tcpdump -nnAs 0 -i 'src host 本机IP and dst host 本机IP'
   171  tcpdump -nnAs 0 -i bond0 'src host 本机IP and dst host 本机IP'
