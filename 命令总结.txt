@@ -189,7 +189,8 @@ source  /etc/sysconfig/i18n
 34.tree 以树的形状显示目录结构 
    -L  最多显示几层目录 
    -d  只显示目录 
-
+    tree -L 1  ##列出本目录下的所有子目录
+    
 35.nl   number line  显示文件内容及行号 
   
 36.tar 创建压缩包
