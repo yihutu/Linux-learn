@@ -315,6 +315,10 @@ tcpdump -nnAs 0 -i 'src host 本机IP and dst host 本机IP'
   171  tcpdump -nnAs 0 -i bond0 'src host 本机IP and dst host 本机IP'
   172  tcpdump -nnAs 0 -i any 'src host 本机IP and dst host 本机IP'
   
+tcudump -i p2p1 port 53 -w 33.txt ##抓包，并保存到文件中，抓取5分钟
+tcpdump -r 33.txt -nn | grep "A?" | wc -l ##抓包完成之后，查看抓到的数量
+tcpdump -r 33.txt -nn | grep "A?" |less ##抓包完成后，查看抓到的内容，直接用cat是无法查看到的内容的，通过-r参数来查
+
 
 68、分析域名的443端口通不通，要是443通的话就不做缓存
 [root@bogon ~]# nc -zv -w 5 baidu.com 443
