@@ -103,6 +103,8 @@ vimdiff ##分屏对比文件
    以.txt结尾的文件
    find /data -type f -name "*.txt"		 
    !非 取反
+    find . -type d -name "webapp" |xargs grep pwd  ##查找到这个文件并显示这个文件的路径
+
       				 		 
 14.grep 三剑客老三，擅长过滤，在文件中找东西 
    -v   排除，把grep找到的东西 排除掉。
