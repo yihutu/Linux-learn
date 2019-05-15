@@ -9,6 +9,7 @@ git add README.md     ##将文件添加到暂存区域
 git commit -m "说明"     ##将文件提交到git仓库
 git commit -am "说明" ##自动帮你将工作目录中所有“已跟踪”的文件先 add 到暂存区域，然后再执行 commit 命令
 git status          ##查看git当前状态
+ssh-keygen -t rsa -C "youremail@example.com"  ##生成ssh key，如果需要远程就将公钥粘到GitHub上
 
 状态说明：
 On branch master 说明我们位于一个叫做“master”的分支里，这是默认的分支
