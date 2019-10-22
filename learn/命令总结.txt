@@ -301,7 +301,7 @@ ps -ef 查看系统进程信息
 
 64、dig +trac www.baidu.com   DNS请求的递归查询过程
     dig +trace -t A @8.8.8.8 taobao.com
-
+    yum install -y bind-utils #安装dig
 
 65、arping -c 1 -I eth0 10.0.0.6   ##解析mac地址
 
