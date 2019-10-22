@@ -186,6 +186,7 @@ source  /etc/sysconfig/i18n
 32.df  查看磁盘空间的使用情况 
    -h  以人类可读的方式显示出来 
    -i  显示磁盘中inode的使用情况
+ df -ThP  | column -t #一行显示，显示文件系统
    
 33.free 系统内存
    -h  
