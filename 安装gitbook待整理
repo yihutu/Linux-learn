@@ -1,0 +1,127 @@
+https://www.cnblogs.com/HuangWj/p/9254711.html
+https://linux.cn/article-10194-1.html
+https://a-programmers-guide-to-english.harryyu.me/essence/
+
+
+安装gitbook
+先安装 nodejs #二进制安装
+官网下载nodejs二进制包
+将包上传到linux相关路径下，一般是/usr/local/
+tar -xvf node-xxxx.tar.gz ---将tar文件解压成文件夹
+mv node-xxx node ----改文件夹的名字，改成node
+cd /usr/local/node/bin/
+./node -v #检查版本
+
+配置软连接，使全局都可以使用node命令
+
+ln -s /usr/local/node/bin/node /usr/bin/node  --将node源文件映射到usr/bin下的node文件
+
+ln -s /usr/local/node/bin/npm /usr/bin/npm
+
+
+配置node文件安装路径
+
+进入/usr/local/node/路径下:
+
+mkdir node_global
+
+mkdir node_cache
+
+npm config set prefix "node_global"
+
+npm config set cache "node_cache"
+
+
+
+当你觉得npm慢的时候，可以安装cnpm（国内的源更快）
+
+npm install cnpm -g --registry=https://registry.npm.taobao.org
+
+顺便可以检查一下-g这个全局安装有没有按照之前设置的，安装到node_global文件下。
+
+如下全局使用cnpm，也要记得配置一个软连接。
+ln -s /usr/local/node/node_global/lib/node_modules/cnpm/bin/cnpm /usr/bin/cnpm
+
+
+
+安装gitbook
+npm install gitbook-cli -g
+或者
+cnpm install gitbook-cli -g 
+
+[root@localhost ~]# cnpm install gitbook-cli -g
+Downloading gitbook-cli to /usr/local/node/node_global/lib/node_modules/gitbook-cli_tmp
+Copying /usr/local/node/node_global/lib/node_modules/gitbook-cli_tmp/_gitbook-cli@2.3.2@gitbook-cli to /usr/local/node/node_global/lib/node_modules/gitbook-cli
+Installing gitbook-cli's dependencies to /usr/local/node/node_global/lib/node_modules/gitbook-cli/node_modules
+[1/11] q@1.5.0 installed at node_modules/_q@1.5.0@q
+[2/11] lodash@4.17.4 installed at node_modules/_lodash@4.17.4@lodash
+[3/11] semver@5.3.0 installed at node_modules/_semver@5.3.0@semver
+[4/11] commander@2.11.0 installed at node_modules/_commander@2.11.0@commander
+[5/11] optimist@0.6.1 installed at node_modules/_optimist@0.6.1@optimist
+[6/11] bash-color@0.0.4 installed at node_modules/_bash-color@0.0.4@bash-color
+[7/11] tmp@0.0.31 installed at node_modules/_tmp@0.0.31@tmp
+[8/11] user-home@2.0.0 installed at node_modules/_user-home@2.0.0@user-home
+[9/11] fs-extra@3.0.1 installed at node_modules/_fs-extra@3.0.1@fs-extra
+[10/11] npmi@1.0.1 installed at node_modules/_npmi@1.0.1@npmi
+[11/11] npm@5.1.0 installed at node_modules/_npm@5.1.0@npm
+All packages installed (20 packages installed from npm registry, used 15s(network 15s), speed 535.18kB/s, json 18(123.18kB), tarball 7.55MB)
+[gitbook-cli@2.3.2] link /usr/local/node/node_global/bin/gitbook@ -> /usr/local/node/node_global/lib/node_modules/gitbook-cli/bin/gitbook.js
+
+
+GitBook配置
+GitBook包含众多插件，有些功能需要插件支持，这里就展示要用到的几个插件的安装，其他插件可自行百度。
+
+插件的安装分两步
+
+用你npm安装插件
+在gitbook工程下，调用以下命令安装
+gitbook install
+
+
+
+GitBook不自带转PDF功能，需要安装Calibra
+
+
+
+GitBook导出的PDF不支持中文，需要安装插件和字体
+
+安装插件
+插件"gitbook-plugin-yahei"，与其他插件安装方式一样
+
+npm install gitbook-plugin-yahei
+
+
+
+yum update  libstdc
+
+
+应为gcc版本低
+[root@gitlab ~]# sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
+2019-10-23 03:54:43 URL:https://download.calibre-ebook.com/linux-installer.sh [31888/31888] -> "-" [1]
+Using python executable: /bin/python2
+Installing to /opt/calibre
+Downloading tarball signature securely...
+Using previously downloaded calibre-4.2.0-x86_64.txz
+Extracting files to /opt/calibre ...
+Extracting application files...
+Traceback (most recent call last):
+  File "site.py", line 75, in main
+  File "site-packages/calibre/__init__.py", line 23, in <module>
+  File "site-packages/calibre/startup.py", line 204, in <module>
+  File "site-packages/calibre/utils/icu.py", line 30, in <module>
+RuntimeError: Failed to load icu with error: /lib64/libstdc++.so.6: version `CXXABI_1.3.8' not found (required by /opt/calibre/lib/libicui18n.so.64)
+Run "calibre" to start calibre
+
+查看版本
+strings /usr/lib64/libstdc++.so.6 | grep GLIBC
+strings /usr/lib64/libstdc++.so.6|grep CXXABI
+
+如果没有新版本就安装升级
+yum install libstdc++.so.6
+
+
+find / -name libstdc++.so.6
+find / -name "libstdc++.so.6*"
+
+
+
